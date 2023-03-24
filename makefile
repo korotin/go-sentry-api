@@ -7,7 +7,7 @@ all:
 
 test:
 	go fmt *.go
-	SENTRY_ENDPOINT=http://localhost:8080/api/0/ go test $$(glide novendor) -v
+	SENTRY_ENDPOINT=http://localhost:8080/api/0/ SENTRY_AUTH_TOKEN=3a2d045ee6dc4996a79d3e3456605c72a23144e4adaf4e0e84a916a77a2e0afc go test $$(glide novendor) -v
 
 devenv:
 	docker run -d --name sentry-redis redis
