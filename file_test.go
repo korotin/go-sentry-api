@@ -23,9 +23,10 @@ func TestReleaseFileResource(t *testing.T) {
 	defer cleanupproj()
 
 	newrelease := NewRelease{
-		Version: "1.0.0",
+		Version:  "1.0.0",
+		Projects: []string{*project.Slug},
 	}
-	release, err := client.CreateRelease(org, project, newrelease)
+	release, err := client.CreateRelease(org, newrelease)
 	if err != nil {
 		t.Fatal(err)
 	}
