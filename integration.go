@@ -46,21 +46,3 @@ func (c *Client) GetIntegrations(o Organization) ([]Integration, error) {
 
 	return integrations, err
 }
-
-func (c *Client) AddRepoToIntegration(o Organization, i Integration, repoID string) (interface{}, error) {
-	request := struct {
-		Installation string `json:"installation,omitempty"`
-		Identifier   string `json:"identifier,omitempty"`
-		Provider     string `json:"provider,omitempty"`
-	}{
-		Installation: i.ID,
-		Identifier:   repoID,
-		Provider:     "integrations:" + i.Provider.Slug,
-	}
-
-	var response interface{}
-
-	err := c.do(http.MethodPost, fmt.Sprintf("organizations/%s/repos/", *o.Slug), &response, request)
-
-	return response, err
-}
