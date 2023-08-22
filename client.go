@@ -211,7 +211,7 @@ func (c *Client) rawWithPagination(method, endpoint string, out, in interface{})
 func (c *Client) fetchLink(r *http.Response) *Link {
 	link := &Link{}
 	if r.Header.Get("Link") != "" {
-		link = NewLink(r.Header.Get("Link"))
+		link = NewLink(c.Endpoint, r.Header.Get("Link"))
 	}
 
 	return link

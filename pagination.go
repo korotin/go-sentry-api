@@ -17,10 +17,15 @@ type Link struct {
 	Next     Page
 }
 
+var schemaRemover = strings.NewReplacer("http://", "", "https://", "")
+
 // NewLink creates a new link object via the link header string
-func NewLink(linkheader string) *Link {
+func NewLink(endpoint, linkheader string) *Link {
 	link := &Link{}
 	links := strings.SplitN(linkheader, ",", 2)
+
+	schemalessEndpoint := schemaRemover.Replace(endpoint)
+
 	for _, page := range links {
 		data := strings.SplitN(page, ";", 4)
 
@@ -31,6 +36,13 @@ func NewLink(linkheader string) *Link {
 		results, err := strconv.ParseBool(strings.Trim(strings.Split(strings.TrimSpace(data[2]), "=")[1], `"`))
 		if err != nil {
 			results = false
+		}
+
+		if !strings.HasPrefix(pagelink, endpoint) {
+			schemalessPagelink := schemaRemover.Replace(pagelink)
+			if strings.HasPrefix(schemalessPagelink, schemalessEndpoint) {
+				pagelink = endpoint + schemalessPagelink[len(schemalessEndpoint):]
+			}
 		}
 
 		if pagetype == "previous" {
